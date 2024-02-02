@@ -43,4 +43,4 @@ There's a web at directory web-client with an index.html that can be used for a 
 2. Run `npm install` to install the dependencies.
 3. Run `node server.js` to start the server.
 4. Open `http://localhost:3000` in your browser.
-5. Use web-client/index.html to take a look at the web.
+5. Use web-client/index.html to take a look at the web (you can use live server extension for vscode) .
