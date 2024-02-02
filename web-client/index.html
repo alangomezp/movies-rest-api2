@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movies</title>
+    <style>
+      div#main {
+        display: flex;
+      }
+      div.pages {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      h4 {
+        margin-right: 10px;
+      }
+      a {
+        padding: 5px;
+      }
+      article {
+        width: 400px;
+        height: auto;
+        max-height: 550px;
+        margin: 30px;
+      }
+      img {
+        width: auto;
+        height: 300px;
+      }
+    </style>
+    <script>
+      const getInfo = (page) => {
+        fetch(`http://localhost:3000/movies?page=${page}`, { method: "GET" })
+          .then((res) => res.json())
+          .then((movies) => {
+            const html = movies
+              .map((movie) => {
+                return `<article data-id=${movie.id}>
+                      <h2>${movie.title}</h2>
+                      <img src=${movie.poster} alt=${movie.title}/>
+                      <h3>${movie.year}</h3>
+                      <button>Delete</button>
+                      </article>
+                      `;
+              })
+              .join("");
+            document.getElementById("main").innerHTML = html;
+            document.addEventListener("click", (e) => {
+              if (e.target.matches("button")) {
+                const article = e.target.closest("article");
+                const id = article.dataset.id;
+                fetch(`http://localhost:3000/movies/${id}`, {
+                  method: "DELETE",
+                })
+                  .then((res) => res.json())
+                  .then((result) => {
+                    if (result.ok) {
+                      article.remove();
+                    }
+                  });
+              }
+            });
+          });
+      };
+
+      getInfo(1);
+    </script>
+  </head>
+  <body>
+    <div id="main"></div>
+    <div class="pages">
+      <h4>pages:</h4>
+      <a href="#" onclick="getInfo(1)">1</a>
+      <a href="#" onclick="getInfo(2)">2</a>
+      <a href="#" onclick="getInfo(3)">3</a>
+      <a href="#" onclick="getInfo(4)">4</a>
+      <a href="#" onclick="getInfo(5)">5</a>
+    </div>
+  </body>
+</html>
